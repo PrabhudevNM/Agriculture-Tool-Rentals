@@ -1,0 +1,14 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns the button at the top */
+    align-items: center;
+    padding-top: 20px; /* Adds some space at the top */
+    background-color: azure;
+}
+
+hr {
+    border: none; /* Removes the default border */
+    height: 1px; /* Sets the height of the horizontal line */
+    background-color: #0a6b1b; /* Changes the color to dark (you can adjust the color) */
+}
