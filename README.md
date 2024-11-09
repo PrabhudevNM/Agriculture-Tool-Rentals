@@ -1,4 +1,4 @@
-# AgriTool-Rentals
+# Agri-Tool-Rentals
 Agricultural Equipements Renting Application using MERN Stack
 
 This platform enables farmers to rent or lend agricultural equipment
