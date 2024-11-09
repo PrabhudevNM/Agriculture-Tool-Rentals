@@ -8,6 +8,7 @@ const { Content } = Layout;
 const AboutUsPage = () => {
   return (
         <DefaultLayout>
+            <div className="container mt-4">
       <Content style={{ padding: '50px' }}>
         <Row justify="center">
           <Col xs={24} sm={16} md={12} lg={10}>
@@ -29,6 +30,7 @@ const AboutUsPage = () => {
           </Col>
         </Row>
       </Content>
+      </div>
       </DefaultLayout>
   );
 };

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../config/axios';
 import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
 
 // Async thunk to book a product
 export const bookProduct = createAsyncThunk(

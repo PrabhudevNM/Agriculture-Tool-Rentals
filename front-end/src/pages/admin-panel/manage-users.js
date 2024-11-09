@@ -116,7 +116,7 @@ export default function ManageUsers() {
   ];
 
   return (
-    <div>
+    <div style={{ padding: '24px' }}y>
       <h2>List of Users - {users.length}</h2>
       <Table
         dataSource={users}

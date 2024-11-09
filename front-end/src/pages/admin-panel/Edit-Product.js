@@ -28,7 +28,7 @@ const EditProduct = ({ product, isVisible, onClose }) => {
         formData.append('file', fileList[0].originFileObj);
       }
 
-      const response = await axios.put(`/api/users/product/${product._id}`, formData, {headers: {'Authorization': localStorage.getItem('token')}});
+      const response = await axios.put(`/api/users/edit-product-admin/${product._id}`, formData, {headers: {'Authorization': localStorage.getItem('token')}});
 
       editProduct(response.data);
       message.success('Product updated successfully');

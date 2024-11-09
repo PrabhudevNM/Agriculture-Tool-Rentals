@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import axios from "../config/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Success() {
+  const navigate=useNavigate()
  
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function Success() {
         console.log(stripeId.data)
         
          await axios.put(`/api/payments/${stripeId}`, { paymentStatus: 'Successful' });
-
+         navigate('/user-bookings')
       } catch (error) {
         console.error(error);
         

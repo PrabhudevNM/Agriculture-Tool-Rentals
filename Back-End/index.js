@@ -52,12 +52,11 @@ app.put('/api/users/admin-change-role/:id', authenticationUser,authorizeUser(['a
 //admin accessing about product
 app.get('/api/users/product-admin',authenticationUser,authorizeUser(['admin']),productCltr.list)
 app.post('/api/users/create-product-admin',authenticationUser,authorizeUser(['admin']),upload.single('file'),productCltr.create)
-app.put('/api/users/edit-product-admin/:id',authenticationUser,authorizeUser(['admin']),productCltr.updateByUser)
+app.put('/api/users/edit-product-admin/:id',authenticationUser,authorizeUser(['admin']),upload.single('file'),productCltr.updateByAdmin)
 app.delete('/api/users/delete-product-admin/:id',authenticationUser,authorizeUser(['admin']),productCltr.delete)
 
 //admin accessing about booking
 app.get('/api/admin-listBookings',authenticationUser,authorizeUser(['admin']),bookingCltr.list)
-
 
 //product api
 app.get('/api/users/product',authenticationUser,productCltr.list)

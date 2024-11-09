@@ -65,7 +65,7 @@ function AuthProvider(props){
     
             // Check user role and navigate accordingly
             if (user.role === 'admin') {
-                navigate('/dashboard'); // Navigate to admin dashboard
+                navigate('/manage-users'); // Navigate to admin dashboard
             } else {
                 navigate('/home'); // Navigate to user home page
             }

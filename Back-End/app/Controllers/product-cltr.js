@@ -115,6 +115,15 @@ productCltr.updateByAdmin=async(req,res)=>{
     const id=req.params.id
     const body=req.body
     const userId=req.userId
+    
+    let temp = JSON.parse(body.rentalPriceForTime)  //we must parse the body in postman form-data
+        // console.log(temp);
+        body.rentalPriceForTime = [...temp] 
+
+        if (req.file) {
+            body.file = `/uploads/${req.file.filename}`;
+        }
+
     try {
         let product
         if(req.role=='admin'){

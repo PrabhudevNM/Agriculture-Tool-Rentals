@@ -1,8 +1,9 @@
 .register-container {
-    position: relative;
-    width: 100;
-    max-width: 1000px;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
 }
 
 .image-container {
@@ -71,7 +72,7 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 50vh; */
     background-color: #f4f4f4;
 }
 
@@ -123,16 +124,4 @@ h3 {
     position: absolute;
     width: 225vh;
     height: 100vh;
-}
-
-.background-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1; /* Ensure the background stays behind other elements */
 }

@@ -25,9 +25,9 @@ const bookingSchema = new Schema({
     ],
   
     
-    // transactionId : {
-    //     type : String
-    // },
+    transactionId : {
+        type : String
+    },
 
 },
 {timestamps : true}
@@ -36,6 +36,12 @@ const bookingSchema = new Schema({
   
 const Booking = model('Booking', bookingSchema);
 export default Booking
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------
   
 
 //   totalTime: {

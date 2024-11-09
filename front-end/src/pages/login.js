@@ -54,8 +54,7 @@ export default function Login() {
                 alt="Agriculture Equipment"
             />
         <div className="form-overlay" data-aos='fade-up'>
-                <b className='bb'>Login/sign In</b>
-                {error && <b className="error-message">{error}</b>}
+                <b className='bb'>Log In / sign In</b>
 
                 <form onSubmit={handleSubmit}>
                     <div className='form-group'>
@@ -67,6 +66,10 @@ export default function Login() {
                             className={error ? 'error-input' : ''}
                         />
                     </div>
+
+                    {error && <b className="error-message">{error}</b>}
+                        
+
                     <div className='form-group'>
                         <input
                             type="password"

@@ -13,17 +13,23 @@ bookingCltr.list=async(req,res)=>{
 
 bookingCltr.create = async (req, res) => {
   try {
-    const body = req.body
-    // req.body.transactionId='1234'
-    const product = new Booking(body);
-    product.user=req.userId
-    product.productId=req.userId
-    await product.save();
+    const body = req.body;
+
+    // Ensure that the booking data includes user and product details
+    const bookingData = {
+      ...body,
+      user: req.userId,                    // Associate the booking with the logged-in user
+      productId: body.productId,            // Ensure productId is taken from req.body if passed
+      transactionId: body.transactionId || 'pending', // Assign transactionId if provided, else set as pending
+    };
+
+    const booking = new Booking(bookingData); // Create a new booking document
+    await booking.save();
 
     res.status(201).json({
       success: true,
       message: 'Booking created successfully',
-      booking: product,
+      booking,
     });
   } catch (error) {
     res.status(500).json({

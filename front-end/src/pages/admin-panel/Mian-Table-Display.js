@@ -6,7 +6,7 @@ import axios from '../../config/axios';
 import { message } from 'antd';
 
 const ProductsPage = () => {
-  const { setProducts } = useContext(ProductContext);
+  const { setProducts,state } = useContext(ProductContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <h2>Product List</h2>
+      <h2>Products List-{state.products.length}</h2>
       {loading ? <div>Loading...</div> : <ProductTable />}
     </div>
   );

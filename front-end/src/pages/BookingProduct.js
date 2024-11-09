@@ -8,12 +8,11 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import AOS from "aos";
 import 'aos/dist/aos.css';
 import { message } from "antd";
-import axios from "../config/axios"
+import axios from "../config/axios";
 
 function BookingProduct() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  
   const { id } = useParams();
   const { currentProduct, user } = useSelector(state => state.products);
   const navigate = useNavigate();
@@ -23,13 +22,14 @@ function BookingProduct() {
     AOS.init();
   }, []);
 
+  // Fetch product details based on ID in the URL
   useEffect(() => {
     if (id) {
       dispatch(getProductById(id));
     }
   }, [dispatch, id]);
 
-  // Handle query params for payment success/failure
+  // Detect successful payment by checking URL parameters for session ID
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const sessionId = queryParams.get('session_id');
@@ -39,19 +39,25 @@ function BookingProduct() {
     }
   }, [location]);
 
+  // Handle successful payment: create booking and clear pending state
   const handlePaymentSuccess = async (sessionId) => {
     try {
-      // Get the pending booking data
-      const pendingBooking = JSON.parse(localStorage.getItem('pendingBooking'));
-      
-      if (pendingBooking) {
-        await dispatch(bookProduct({
-          ...pendingBooking,
+      if (currentProduct && user) {
+        const bookingData = {
+          productName: currentProduct.title,
+          productId: currentProduct._id,
+          rentalPriceForTime: [{
+            period: currentProduct.rentalPriceForTime[0].period,
+            price: currentProduct.rentalPriceForTime[0].price
+          }],
+          user: user._id,
+          paymentStatus: "completed",
           transactionId: sessionId
-        })).unwrap();
-        
+        };
+
+        // Dispatch booking creation
+        await dispatch(bookProduct(bookingData)).unwrap();
         message.success("Payment successful! Your booking is confirmed.");
-        localStorage.removeItem('pendingBooking');
         navigate('/user-bookings');
       }
     } catch (error) {
@@ -60,10 +66,34 @@ function BookingProduct() {
     }
   };
 
+  // Function to book the product now without payment
+  const BookNow = async () => {
+    const reqObj = {
+      productName: currentProduct.title,
+      user: user?._id,
+      productId: currentProduct._id,
+      rentalPriceForTime: [{
+        period: currentProduct.rentalPriceForTime[0].period,
+        price: currentProduct.rentalPriceForTime[0].price
+      }],
+      // transactionId: sessionId,  // Simulated transaction ID
+    };
+
+    try {
+      await dispatch(bookProduct(reqObj)).unwrap();
+      message.success("Product booked successfully!");
+      navigate('/user-bookings');
+      console.log(reqObj);
+    } catch (error) {
+      message.error("Failed to book the product.");
+      console.error("Booking error:", error);
+    }
+  };
+
+  // Initiate payment process for the selected product
   const makePayment = async (product) => {
     setLoading(true);
     try {
-      // Structure payment data to match schema exactly
       const paymentData = {
         productId: product._id,
         productName: product.title,
@@ -73,25 +103,17 @@ function BookingProduct() {
         }]
       };
 
-      // Store booking data for after payment success
-      localStorage.setItem('pendingBooking', JSON.stringify({
-        productId: product._id,
-        productName: product.title,
-        amount: product.rentalPriceForTime[0].price
-      }));
+      // Directly proceed to payment API and handle redirection
+      const response = await axios.post('/api/create-checkout-session', paymentData,{ headers: { 'Authorization': localStorage.getItem('token') } });
 
-      // Create checkout session
-      const response = await axios.post('/api/create-checkout-session', paymentData,{headers:{'Authorization':localStorage.getItem('token')}});
-      localStorage.setItem('stripeId', response.data.id);
       if (response.data.url) {
-        window.location.href = response.data.url;
+        window.location.href = response.data.url; // Redirect to the payment page
       } else {
         throw new Error('No payment URL received');
       }
     } catch (error) {
       console.error('Payment error:', error);
       message.error(error.response?.data?.message || "Payment failed. Please try again.");
-      localStorage.removeItem('pendingBooking');
     } finally {
       setLoading(false);
     }
@@ -99,6 +121,8 @@ function BookingProduct() {
 
   return (
     <DefaultLayout>
+    <div className="container mt-4">
+      
       <Row justify="center" className="d-flex align-items-center" style={{ minHeight: "90vh" }}>
         <Col lg={10} sm={24} xs={24} className='p-3'>
           <img 
@@ -138,8 +162,18 @@ function BookingProduct() {
           >
             {loading ? 'Processing...' : 'Book Now'}
           </button>
+
+          {/* Alternative booking option without payment */}
+          <button 
+            className="btn5" 
+            onClick={BookNow} 
+            disabled={loading || !currentProduct}
+          >
+            Book Now (Without Payment)
+          </button>
         </Col>
       </Row>
+      </div>
     </DefaultLayout>
   );
 }

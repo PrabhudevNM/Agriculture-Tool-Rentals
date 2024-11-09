@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { Table, message, Spin } from 'antd';
+import { Table, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBookings } from '../redux-toolkit/createAsyncThunk/bookingThunk';
 import DefaultLayout from '../components/DefaultLayout';
 
 const UserBookings = () => {
   const dispatch = useDispatch();
-  const { bookings, loading, error } = useSelector((state) => state.bookings);
+  const { bookings, error } = useSelector((state) => state.bookings);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -22,10 +22,6 @@ const UserBookings = () => {
     fetchBookings();
   }, [dispatch]);
 
-  if (loading) {
-    return <Spin tip="Loading bookings..." />;
-  }
-
   if (error) {
     message.error(error);
   }
@@ -36,23 +32,21 @@ const UserBookings = () => {
       dataIndex: 'productName',
       key: 'productName',
     },
+    
     {
       title: 'Rental Period',
       dataIndex: 'rentalPriceForTime',
       key: 'rentalPeriod',
       render: (rentalPriceForTime) => rentalPriceForTime?.[0]?.period || 'N/A',
     },
+
     {
       title: 'Rental Price',
       dataIndex: 'rentalPriceForTime',
       key: 'rentalPrice',
       render: (rentalPriceForTime) => `₹${rentalPriceForTime?.[0]?.price || 0}`,
     },
-    {
-      title: 'Booking ID',
-      dataIndex: '_id',
-      key: 'bookingId',
-    },
+
     {
       title: 'Booking Date',
       dataIndex: 'createdAt',
@@ -63,7 +57,7 @@ const UserBookings = () => {
 
   return (
     <DefaultLayout>
-    <div>
+                <div className="container mt-4">
       <h2>Your Bookings</h2>
       <Table
         dataSource={bookings}  // Ensure bookings is an array

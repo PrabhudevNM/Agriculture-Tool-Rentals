@@ -8,6 +8,7 @@ const { Content } = Layout;
 const ContactPage = () => {
   return (
     <DefaultLayout>
+            <div className="container mt-4">
       <Content style={{ padding: '50px' }}>
         <Row justify="center">
           <Col xs={24} sm={16} md={12} lg={8}>
@@ -28,6 +29,7 @@ const ContactPage = () => {
           </Col>
         </Row>
       </Content>
+      </div>
     </DefaultLayout>
   );
 };
