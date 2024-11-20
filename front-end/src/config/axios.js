@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export default axios.create({
-    baseURL:'http://localhost:8020'
+    baseURL:'https://agriculture-tool-rentals.onrender.com'
 })
