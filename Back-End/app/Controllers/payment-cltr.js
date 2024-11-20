@@ -51,8 +51,8 @@ paymentsCltr.pay = async (req, res) => {
         quantity: 1
       }],
       mode: 'payment',
-      success_url: process.env.SUCCESS_URL ,
-      cancel_url: process.env.CANCEL_URL ,
+      success_url: "https://agriculture-tool-rentals.onrender.com/success" || process.env.SUCCESS_URL ,
+      cancel_url: "https://agriculture-tool-rentals.onrender.com/cancel" || process.env.CANCEL_URL ,
       customer: customer.id,
     });
 
