@@ -1,0 +1,23 @@
+.header {
+    display: flex; /* Enables flexbox */
+    justify-content: space-between; /* Pushes items to the edges */
+    align-items: center; /* Aligns items vertically */
+    padding: 5px 20px; /* Adds spacing around the content */
+    background-color: #f8f9fa; /* Optional: Background color */
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.nav-links {
+    display: flex; /* Align links horizontally */
+    gap: 15px; /* Add spacing between links */
+    flex-wrap: nowrap; /* Prevent wrapping on desktop */
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column; /* Stack links vertically on smaller screens */
+        align-items: center; /* Center-align the links */
+        gap: 10px; /* Adjust spacing for mobile */
+    }
+}
