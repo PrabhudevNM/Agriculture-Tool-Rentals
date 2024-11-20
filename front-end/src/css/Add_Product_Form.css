@@ -1,0 +1,8 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns the button at the top */
+    align-items: center;
+    padding-top: 20px; /* Adds some space at the top */
+    background-color: azure;
+}

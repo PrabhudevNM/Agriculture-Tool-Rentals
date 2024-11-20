@@ -1,0 +1,12 @@
+.ant-alert {
+    text-align: center;
+}
+
+.ant-alert-message {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.ant-alert-description {
+    font-size: 14px;
+}
