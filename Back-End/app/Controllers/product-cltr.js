@@ -94,65 +94,82 @@ productCltr.show=async(req,res)=>{
 
 productCltr.updateByUser = async (req, res) => {
     try {
-        const body = req.body;
-        const userId = req.userId; // User ID from the request (usually from authentication middleware)
-        const productId = req.params.id; 
-        let temp = JSON.parse(body.rentalPriceForTime)  //we must parse the body in postman form-data
-        // console.log(temp);
-        body.rentalPriceForTime = [...temp] 
+        const userId = req.userId; // Extract user ID from the request
+        const productId = req.params.id; // Extract product ID from the request params
+        const body = { ...req.body }; // Clone the request body
+        const file = req.file;
 
-        const file=req.file
-        const fileUri = getDataUri(file); // or  getDataUri(file)
-                const result = await cloudinary.uploader.upload(fileUri.content, {
-                    folder: "Profile",
-                });
-                body.file = result.secure_url;
+        // Handle rentalPriceForTime
+        if (body.rentalPriceForTime) {
+            try {
+                body.rentalPriceForTime = JSON.parse(body.rentalPriceForTime);
+            } catch (error) {
+                return res.status(400).json({ message: "Invalid rentalPriceForTime format" });
+            }
+        }
 
-       
-        const product = await Product.findOneAndUpdate( { _id: productId, owner: userId },body, { new: true });
-        if (!product) {
+        // Handle file upload if a new file is provided
+        if (file) {
+            const fileUri = getDataUri(file);
+            const result = await cloudinary.uploader.upload(fileUri.content, {
+                folder: "Products",
+            });
+            body.file = result.secure_url;
+        }
+
+        // Update the product, retaining old fields if they are not provided in the request
+        const updatedProduct = await Product.findOneAndUpdate({ _id: productId, owner: userId },{ $set: body },{ new: true });
+
+        if (!updatedProduct) {
             return res.status(404).json({ message: "Product not found or unauthorized" });
         }
-        res.json(product);
+
+        res.status(200).json(updatedProduct);
     } catch (error) {
+        console.error("Error updating product:", error);
         res.status(500).json({ error: error.message });
     }
 };
 
-//not added in routes api
+
 productCltr.updateByAdmin=async(req,res)=>{
-    const id=req.params.id
-    const body=req.body
-    const userId=req.userId
-    
-    let temp = JSON.parse(body.rentalPriceForTime)  //we must parse the body in postman form-data
-        // console.log(temp);
-        body.rentalPriceForTime = [...temp] 
-
-        const file=req.file
-        const fileUri = getDataUri(file); // or  getDataUri(file)
-                const result = await cloudinary.uploader.upload(fileUri.content, {
-                    folder: "Profile",
-                });
-                body.file = result.secure_url;
-
     try {
-        let product
-        if(req.role=='admin'){
-            // when in admin panel
-            product=await Product.findByIdAndUpdate(id,body,{new:true})
-        }else{
-            // when user panel that he want to update particular product
-            product=await Product.findOneAndUpdate({_id:id,owner:userId},body,{new:true})
+        const userId = req.userId; // Extract user ID from the request
+        const productId = req.params.id; // Extract product ID from the request params
+        const body = { ...req.body }; // Clone the request body
+        const file = req.file;
+
+        // Handle rentalPriceForTime
+        if (body.rentalPriceForTime) {
+            try {
+                body.rentalPriceForTime = JSON.parse(body.rentalPriceForTime);
+            } catch (error) {
+                return res.status(400).json({ message: "Invalid rentalPriceForTime format" });
+            }
         }
-        if(!product){
-            return res.status(404).json({})
+
+        // Handle file upload if a new file is provided
+        if (file) {
+            const fileUri = getDataUri(file);
+            const result = await cloudinary.uploader.upload(fileUri.content, {
+                folder: "Products",
+            });
+            body.file = result.secure_url;
         }
-        res.json(product)
+
+        // Update the product, retaining old fields if they are not provided in the request
+        const updatedProduct = await Product.findOneAndUpdate({ _id: productId, owner: userId },{ $set: body },{ new: true });
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found or unauthorized" });
+        }
+
+        res.status(200).json(updatedProduct);
     } catch (error) {
-        res.json(error)
+        console.error("Error updating product:", error);
+        res.status(500).json({ error: error.message });
     }
-}
+};
 
 
 productCltr.delete=async(req,res)=>{
